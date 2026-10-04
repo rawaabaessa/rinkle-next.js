@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "thmanyah sans";
+  src: url("/fonts/Thmanyah-Font-Family/thmanyah%20typeface/thmanyahsans/woff2/thmanyahsans-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "thmanyah sans";
+  src: url("/fonts/Thmanyah-Font-Family/thmanyah%20typeface/thmanyahsans/woff2/thmanyahsans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "thmanyah sans";
+  src: url("/fonts/Thmanyah-Font-Family/thmanyah%20typeface/thmanyahsans/woff2/thmanyahsans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "thmanyah sans";
+  src: url("/fonts/Thmanyah-Font-Family/thmanyah%20typeface/thmanyahsans/woff2/thmanyahsans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "thmanyah sans";
+  src: url("/fonts/Thmanyah-Font-Family/thmanyah%20typeface/thmanyahsans/woff2/thmanyahsans-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --page: #fbf8f5;
+  --surface: #fffdfb;
+  --ink: #2d1b16;
+  --cocoa: #633b2b;
+  --accent: #b45a43;
+  --muted: #786c68;
+  --line: #e9dfd8;
+  --font-rinkle: "thmanyah sans", "Noto Sans Arabic", Tahoma, sans-serif;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-cocoa: var(--cocoa);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: var(--font-rinkle);
+}
