@@ -34,7 +34,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-1.5 max-[600px]:gap-0">
           <button className={`inline-flex ${iconButtonClass}`} type="button" aria-label={searchOpen ? "إغلاق البحث" : "فتح البحث"} aria-expanded={searchOpen} onClick={() => { setSearchOpen(!searchOpen); setCartOpen(false); setMenuOpen(false); }}>{searchOpen ? <CloseIcon /> : <SearchIcon />}</button>
-          <button className={`inline-flex ${iconButtonClass}`} type="button" aria-label={cartOpen ? "إغلاق السلة" : "فتح السلة"} aria-expanded={cartOpen} onClick={() => { setCartOpen(!cartOpen); setSearchOpen(false); setMenuOpen(false); }}><BagIcon /></button>
+          <button className={`hidden md:inline-flex ${iconButtonClass}`} type="button" aria-label={cartOpen ? "إغلاق السلة" : "فتح السلة"} aria-expanded={cartOpen} onClick={() => { setCartOpen(!cartOpen); setSearchOpen(false); setMenuOpen(false); }}><BagIcon /></button>
           <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" className={`ms-[11px] inline-flex min-h-[42px] items-center justify-center rounded-xl border border-line bg-white px-[19px] text-sm font-bold text-ink shadow-[0_3px_12px_#4c211207] transition-colors hover:border-[#d5b7a7] hover:bg-[#f4e9e2] motion-reduce:transition-none max-[1100px]:hidden ${focusClass}`}>تواصلي معنا</a>
           <button className={`hidden max-[900px]:inline-flex ${iconButtonClass}`} type="button" aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"} aria-expanded={menuOpen} onClick={() => { setMenuOpen(!menuOpen); setSearchOpen(false); setCartOpen(false); }}>{menuOpen ? <CloseIcon /> : <MenuIcon />}</button>
         </div>

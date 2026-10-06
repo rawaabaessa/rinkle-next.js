@@ -3,13 +3,52 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "@/components/ui/icons";
 import { categoryHref, type Category } from "./categories";
 
-export function CategoryCard({ category, featured = false }: { category: Category; featured?: boolean }) {
+export function CategoryCard({
+  category,
+  featured = false,
+}: {
+  category: Category;
+  featured?: boolean;
+}) {
   return (
-    <Link href={categoryHref(category.slug)} prefetch={false} className={`group relative isolate block min-h-[186px] overflow-hidden rounded-[20px] bg-[#cbb2a0] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent max-[900px]:min-h-[230px] max-[600px]:min-h-[178px] max-[600px]:rounded-[15px] ${featured ? "col-span-2 min-h-[170px] max-[900px]:min-h-[220px] max-[600px]:min-h-[180px]" : ""}`} aria-label={`تصفحي قسم ${category.name}`}>
-      <Image src={category.image} alt={category.imageAlt} fill sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 28vw" className="object-cover transition-transform duration-[350ms] group-hover:scale-[1.06] motion-reduce:transition-none" />
-      <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,#20120fb8_100%)]" aria-hidden="true" />
-      <span className="absolute right-5 bottom-[19px] z-10 text-[23px] leading-[1.15] font-extrabold text-white shadow-none [text-shadow:0_2px_6px_#0007] max-[600px]:right-[13px] max-[600px]:bottom-3.5 max-[600px]:text-xl">{category.name}<small className="mt-[5px] block text-xs leading-[1.35] font-medium max-[600px]:max-w-[130px] max-[600px]:text-[10px]">{category.note}</small></span>
-      <span className="absolute bottom-[18px] left-[17px] z-10 grid size-[39px] place-items-center rounded-full bg-white text-cocoa transition-transform group-hover:-translate-x-1 motion-reduce:transition-none max-[600px]:bottom-3 max-[600px]:left-3 max-[600px]:size-8 [&_svg]:size-[18px] max-[600px]:[&_svg]:size-[15px]" aria-hidden="true"><ArrowLeftIcon /></span>
+    <Link
+      href={categoryHref(category.slug)}
+      prefetch={false}
+      className={`group relative isolate flex min-h-56 items-end overflow-hidden rounded-2xl bg-cocoa p-4 text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:rounded-3xl sm:p-6 ${featured ? "col-span-2 sm:min-h-52" : "sm:min-h-60"}`}
+      aria-label={`تصفحي قسم ${category.name}`}
+    >
+      {/* صورة تغطي خلفية البطاقة بالكامل */}
+      <Image
+        src={category.image}
+        alt=""
+        fill
+        sizes={featured
+          ? "(max-width: 1023px) 100vw, 60vw"
+          : "(max-width: 1023px) 50vw, 30vw"}
+        className="object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+      />
+
+      {/* طبقة سوداء خفيفة، وتدرج أغمق خلف النص لزيادة الوضوح */}
+      <span aria-hidden="true" className="absolute inset-0 bg-black/30" />
+      <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+      {/* المحتوى فوق الصورة والتغبيش */}
+      <span className="relative z-10 flex w-full flex-wrap items-end justify-between gap-3 sm:flex-nowrap">
+        <span className="min-w-0">
+          <span className="block text-2xl leading-snug font-bold sm:text-3xl">
+            {category.name}
+          </span>
+          <span className="mt-2 block text-sm leading-relaxed text-white/90">
+            {category.note}
+          </span>
+        </span>
+        <span
+          className="grid size-10 shrink-0 place-items-center rounded-full border border-white/40 bg-white/10 transition-colors duration-200 group-hover:bg-white group-hover:text-cocoa group-focus-visible:bg-white group-focus-visible:text-cocoa motion-reduce:transition-none"
+          aria-hidden="true"
+        >
+          <ArrowLeftIcon className="size-5" />
+        </span>
+      </span>
     </Link>
   );
 }

@@ -3,6 +3,7 @@ import { FaqSection } from "@/components/home/faq-section";
 import { HeroSection } from "@/components/home/hero-section";
 import { HowItWorksSection } from "@/components/home/how-it-works-section";
 import { OccasionsSection } from "@/components/home/occasions-section";
+import { TestimonialsSection } from "@/components/home/testimonials-section";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <CategoriesSection />
       <HowItWorksSection />
       <FaqSection />
+      <TestimonialsSection />
     </>
   );
 }
