@@ -14,10 +14,29 @@ export function SiteFooter() {
     >
       <Container>
         <div className="relative overflow-hidden rounded-[30px] bg-ink px-[61px] pt-[54px] pb-8 text-white max-[600px]:rounded-[23px] max-[600px]:px-6 max-[600px]:pt-[34px] max-[600px]:pb-[23px]">
-          <span
+          <svg
             aria-hidden="true"
-            className="pointer-events-none absolute -top-[155px] -left-[120px] size-[330px] rounded-full border border-[#ffffff18] bg-[#ffffff0a]"
-          />
+            focusable="false"
+            viewBox="0 0 400 400"
+            className="pointer-events-none absolute -top-[155px] -left-[120px] size-[330px] fill-[#ffffff0a]"
+          >
+            <path
+              className="stroke-[#ffffff18]"
+              vectorEffect="non-scaling-stroke"
+              d="M200 8C216 1 231 13 244 14C262 12 271 28 284 33C302 34 307 52 319 61C337 66 338 85 347 97C364 106 361 125 368 139C382 152 375 169 379 184C390 200 380 216 379 231C383 250 367 262 363 276C363 295 345 302 337 315C332 333 313 336 302 347C292 364 273 361 259 368C245 382 228 375 212 379C195 390 180 380 165 379C146 383 135 368 120 364C101 364 95 346 81 338C63 333 61 314 50 302C34 292 37 273 30 259C16 245 23 228 19 212C8 196 18 180 19 165C15 146 31 134 35 120C35 101 53 94 61 81C66 63 85 60 97 49C107 33 126 36 140 29C153 15 171 22 185 16C190 13 195 10 200 8Z"
+            />
+            <g className="fill-[#ffffff18]">
+              <path d="m192 212 17-7 13 12-5 18-20-2Z" />
+              <path d="m280 194 19 5 4 18-17 10-15-12Z" />
+              <path d="m321 263 17-5 12 14-8 17-19-4Z" />
+              <path d="m245 288 19-5 11 16-10 16-19-7Z" />
+              <path d="m166 316 18-6 13 14-7 16-20-3Z" />
+              <circle cx="249" cy="247" r="5" />
+              <circle cx="205" cy="279" r="6" />
+              <circle cx="298" cy="323" r="5" />
+              <circle cx="220" cy="352" r="4" />
+            </g>
+          </svg>
           <div className="relative">
             <span className="text-sm font-bold text-white">
               لحظات أحلى مع رينكل

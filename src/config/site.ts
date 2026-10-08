@@ -7,13 +7,13 @@ export const siteConfig = {
   },
   navigation: [
     { label: "الرئيسية", href: "/" },
-    { label: "المنتجات", href: "/#categories" },
+    { label: "المنتجات", href: "/products" },
     { label: "طريقة الطلب", href: "/#how-it-works" },
     { label: "الأسئلة الشائعة", href: "/#faq" },
   ],
   footerNavigation: [
     { label: "الرئيسية", href: "/" },
-    { label: "الأقسام", href: "/#categories" },
+    { label: "المنتجات", href: "/products" },
     { label: "طريقة الطلب", href: "/#how-it-works" },
     { label: "الأسئلة الشائعة", href: "/#faq" },
   ],

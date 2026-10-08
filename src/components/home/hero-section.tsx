@@ -13,14 +13,14 @@ export function HeroSection() {
       className="relative overflow-hidden bg-transparent"
       aria-labelledby="hero-title"
     >
-      <Container className="grid min-h-[605px] grid-cols-[.92fr_1.08fr] items-center gap-[clamp(42px,6vw,92px)] pt-[58px] pb-[90px] max-[1100px]:gap-[30px] max-[900px]:grid-cols-1 max-[900px]:gap-[30px] max-[900px]:pt-[42px] max-[600px]:pt-9 max-[600px]:pb-[76px]">
-        <div className="max-w-[565px] max-[900px]:max-w-[650px]">
-          <span className="inline-flex min-h-[37px] items-center rounded-full bg-[#f1e6e0] px-[17px] text-[13px] font-bold text-[#87503f] max-[600px]:text-xs">
+      <Container className="grid min-h-51.25 grid-cols-[.92fr_1.08fr] items-center gap-[clamp(42px,6vw,92px)] pt-14.5 pb-22.5 max-[1100px]:gap-7.5 max-[900px]:grid-cols-1 max-[900px]:gap-7.5 max-[900px]:pt-10.5 max-[600px]:pt-9 max-[600px]:pb-19">
+        <div className="max-w-141.25 max-[900px]:max-w-162.5">
+          <span className="inline-flex min-h-9.25 items-center rounded-full bg-[#f1e6e0] px-4.25 text-[13px] font-bold text-[#87503f] max-[600px]:text-xs">
             اختاري و حددي الموعد و الباقي علينا
           </span>
           <h1
             id="hero-title"
-            className="mt-[27px] text-[clamp(43px,4.4vw,65px)] leading-[1.34] font-extrabold tracking-[-.025em] max-[900px]:text-[clamp(47px,7vw,68px)] max-[600px]:mt-[21px] max-[600px]:text-[clamp(38px,9.3vw,52px)] max-[600px]:leading-[1.3]"
+            className="mt-6.75 text-[clamp(43px,4.4vw,65px)] leading-[1.34] font-extrabold tracking-[-.025em] max-[900px]:text-[clamp(47px,7vw,68px)] max-[600px]:mt-[21px] max-[600px]:text-[clamp(38px,9.3vw,52px)] max-[600px]:leading-[1.3]"
           >
             من اول لقمة
             <br />

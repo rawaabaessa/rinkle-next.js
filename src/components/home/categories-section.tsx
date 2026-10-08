@@ -25,7 +25,7 @@ export function CategoriesSection() {
           </p>
           <div className="mt-6 flex items-center gap-3 text-sm font-semibold text-muted lg:mt-10">
             خمسة أقسام مليانة أشياء لذيذة
-            <Link href={""}>
+            <Link href="/products" aria-label="تصفّحي جميع المنتجات">
               <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line text-accent hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                 <ArrowLeftIcon aria-hidden="true" className="size-4" />
               </span>{" "}

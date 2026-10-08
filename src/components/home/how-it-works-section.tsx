@@ -52,8 +52,27 @@ export function HowItWorksSection() {
         </div>
 
         <figure className="relative mx-auto w-full max-w-sm">
-          {/* خلفية هادئة وإطار جوال بسيط */}
-          <div aria-hidden="true" className="absolute inset-x-0 top-16 bottom-12 rounded-full bg-cocoa/5" />
+          {/* كوكيز بدرجة الخلفية الأصلية خلف إطار الجوال */}
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            viewBox="0 0 400 400"
+            className="pointer-events-none absolute inset-x-0 top-1/2 aspect-square w-full -translate-y-1/2 fill-cocoa/5"
+          >
+            <path d="M200 8C216 1 231 13 244 14C262 12 271 28 284 33C302 34 307 52 319 61C337 66 338 85 347 97C364 106 361 125 368 139C382 152 375 169 379 184C390 200 380 216 379 231C383 250 367 262 363 276C363 295 345 302 337 315C332 333 313 336 302 347C292 364 273 361 259 368C245 382 228 375 212 379C195 390 180 380 165 379C146 383 135 368 120 364C101 364 95 346 81 338C63 333 61 314 50 302C34 292 37 273 30 259C16 245 23 228 19 212C8 196 18 180 19 165C15 146 31 134 35 120C35 101 53 94 61 81C66 63 85 60 97 49C107 33 126 36 140 29C153 15 171 22 185 16C190 13 195 10 200 8Z" />
+            <g>
+              <path d="m45 153 13-5 9 10-4 13-15-2Z" />
+              <path d="m32 214 11-7 12 8-2 14-15 2Z" />
+              <path d="m57 278 14-3 8 12-8 11-14-5Z" />
+              <path d="m329 117 13-4 8 10-5 12-13-2Z" />
+              <path d="m349 178 12 4 3 13-12 7-11-9Z" />
+              <path d="m333 250 15-4 9 12-8 14-15-5Z" />
+              <circle cx="48" cy="191" r="4" />
+              <circle cx="48" cy="253" r="5" />
+              <circle cx="347" cy="225" r="4" />
+              <circle cx="326" cy="299" r="5" />
+            </g>
+          </svg>
           <div
             id="order-phone-preview"
             role="img"
