@@ -1,0 +1,20 @@
+export type OrderStatus = "review" | "processing" | "ready";
+export type DeliveryStatus = "waiting" | "out" | "delivered";
+export type OrderUpdate = { id: string; status: OrderStatus; deliveryStatus: DeliveryStatus };
+export type AdminOrder = OrderUpdate & {
+  customer: string;
+  phone: string;
+  deliveryAreaId: string;
+  deliveryAreaName: string;
+  date: string;
+  time: string;
+  total: number;
+  deliveryFee: number;
+  deliveryDate: string;
+  deliveryWindow: string;
+  address: string;
+  paymentMethod: string;
+  gift: boolean;
+  note: string;
+  items: { name: string; image: string; quantity: number; unitPrice: number; detail: string; writing: string }[];
+};
