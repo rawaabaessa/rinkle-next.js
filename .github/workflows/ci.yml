@@ -2,7 +2,7 @@ name: Rinkle Bakery CI
 
 on:
   push:
-    branches: [master]
+    branches: [dev, master]
   pull_request:
     branches: [master]
 
