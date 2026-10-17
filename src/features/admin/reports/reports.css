@@ -1,0 +1,66 @@
+.report-source { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 24px; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.report-source svg { flex-shrink: 0; color: var(--cocoa); margin-top: 4px; }
+.report-filters { margin-bottom: 22px; }
+.report-filters h2 { display: flex; align-items: center; gap: 10px; }
+.report-filter-fields { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)) auto; gap: 16px; align-items: start; }
+.report-filter-fields > button { align-self: start; margin-top: 30px; }
+.report-filter-fields .admin-field label { margin-bottom: 10px; }
+.report-filter-fields .admin-field :is(input,select) { min-width: 0; width: 100%; min-height: 46px; background: var(--page); }
+.report-filter-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 16px; color: var(--muted); font-size: 12px; }
+.report-filter-footer button { min-height: 44px; }
+.report-period { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; color: var(--muted); font-size: 12px; margin: 0 4px 20px; }
+.report-period > span:last-child { margin-inline-start: auto; }
+.reports-page .admin-kpis { gap: 16px; margin-bottom: 24px; }
+.reports-page .admin-kpi-value { font-size: clamp(22px,2vw,31px); }
+.report-analysis-grid { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 24px; align-items: stretch; margin-bottom: 24px; }
+.report-chart { width: 100%; height: 280px; min-width: 0; }
+.report-chart-note { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 18px; }
+.report-breakdown dl { display: grid; gap: 18px; }
+.report-breakdown dl > div { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 12px; }
+.report-breakdown dt { color: var(--muted); }
+.report-breakdown dd { font-weight: 600; }
+.report-breakdown-total { padding-top: 18px; border-top: 1px solid var(--line); color: var(--cocoa); }
+.report-breakdown h3 { font-size: 13px; font-weight: 700; margin-block: 26px 16px; }
+.report-breakdown ul { display: grid; gap: 12px; }
+.report-breakdown li { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 12px; color: var(--muted); }
+.report-breakdown li strong { background: var(--page); color: var(--ink); min-width: 28px; text-align: center; padding: 3px 6px; border-radius: 7px; font-weight: 500; }
+.report-details-heading { padding: 26px 26px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.report-details-heading h2 { font-size: 18px; font-weight: 700; }
+.report-details-heading p { color: var(--muted); font-size: 12px; line-height: 1.8; margin-top: 8px; }
+.report-table-tools { padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
+.report-sort { display: flex; gap: 10px; align-items: center; font-size: 12px; color: var(--muted); }
+.report-sort select { min-height: 44px; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; color: var(--ink); padding: 8px 12px; }
+.report-table { min-width: 620px; }
+.report-table tbody th { background: transparent; color: var(--ink); padding: 20px 24px; border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 500; white-space: normal; min-width: 190px; }
+.report-table tbody tr:last-child th { border-bottom: 0; }
+.report-table thead th { padding-inline: 24px; }
+.report-table td { white-space: nowrap; }
+.report-money { font-weight: 600; color: var(--cocoa); }
+.report-export-notice { padding: 0 26px 20px; font-size: 12px; color: var(--cocoa); line-height: 1.8; }
+.report-empty h2 { font-size: 20px; font-weight: 700; }
+.report-empty p { margin: 12px auto 24px; max-width: 400px; line-height: 1.9; }
+@media (max-width: 1200px) {
+  .report-filter-fields { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .report-filter-fields > button { margin-top: 0; }
+  .report-analysis-grid { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 600px) {
+  .reports-page .admin-page-heading { flex-direction: column; align-items: flex-start; }
+  .report-filters { padding: 20px 16px; }
+  .report-filters .admin-panel-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
+  .report-filters .admin-range-control { width: 100%; display: flex; }
+  .report-filters .admin-range-control button { flex: 1; min-height: 44px; }
+  .report-filter-fields { gap: 18px 12px; }
+  .report-filter-fields :is(input,select) { font-size: 16px; }
+  .report-filter-fields > button { grid-column: 1 / -1; }
+  .report-period > span:last-child { margin-inline-start: 0; }
+  .report-analysis-grid > .admin-panel { padding: 22px 16px; }
+  .report-details-heading { padding: 22px 16px 0; }
+  .report-table-tools { padding: 20px 16px; }
+  .report-table-tools .admin-tabs { width: 100%; }
+  .report-table-tools .admin-tabs button { flex: 1; min-height: 44px; padding-inline: 10px; }
+  .report-details .admin-table-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .report-chart { height: 260px; }
+  .report-chart .recharts-default-tooltip { max-width: 200px; }
+}
+@media (max-width: 359px) { .report-filter-fields { grid-template-columns: minmax(0,1fr); } }

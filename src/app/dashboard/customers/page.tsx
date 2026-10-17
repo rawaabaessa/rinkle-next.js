@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { DashboardPlaceholder } from "@/features/admin/components/DashboardPlaceholder";
+import { CustomersManager } from "@/features/admin/customers/CustomersManager";
 
 export const metadata: Metadata = { title: "العملاء" };
 
 export default function CustomersPage() {
-  return <DashboardPlaceholder title="العملاء" description="عملاء المتجر وبياناتهم وسجل طلباتهم." icon="customers" />;
+  return <CustomersManager />;
 }
