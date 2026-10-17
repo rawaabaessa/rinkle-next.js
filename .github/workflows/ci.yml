@@ -27,6 +27,9 @@ jobs:
       - name: Check ESLint
         run: npm run lint
 
+      - name: Generate Next.js types
+        run: npx next typegen
+
       - name: Check TypeScript
         run: npx tsc --noEmit
 
