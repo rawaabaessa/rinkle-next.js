@@ -1,0 +1,27 @@
+.account-area { padding-block: 30px 72px; }
+.account-card { background: #fff; border: 1px solid #eeeae7; border-radius: 24px; padding: clamp(22px,3vw,34px); box-shadow: 0 8px 32px #301b1205; min-width: 0; }
+.account-eyebrow { color: #927a6e; font-size: 11px; letter-spacing: .12em; font-weight: 700; }
+.account-symbol { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 22px; color: var(--cocoa); background: #f7f2ee; }
+.account-label { display: flex; flex-direction: column; gap: 10px; font-size: 14px; font-weight: 500; }
+.account-input { width: 100%; min-height: 52px; border: 1px solid #e7e2de; background: #fff; border-radius: 13px; padding: 12px 15px; color: var(--ink); font: inherit; }
+.account-input:focus { outline: 2px solid #633b2b; outline-offset: 3px; }
+.account-input[aria-invalid=true] { border-color: #b45a43; }
+.account-icon-button { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #f8f7f6; cursor: pointer; flex-shrink: 0; }
+.account-text-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; color: var(--cocoa); font-size: 13px; cursor: pointer; }
+.account-text-button:disabled { opacity: .45; cursor: default; }
+.account-notice { padding: 13px 16px; border-radius: 12px; background: #f6f6f5; color: #786c68; font-size: 12px; line-height: 1.9; }
+.account-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 99px; padding: 6px 12px; font-size: 11px; color: #633b2b; background: #f5efeb; white-space: nowrap; }
+.account-pill[data-complete=true] { background: #eef5f0; color: #397452; }
+.customer-dialog { position: fixed; inset: 0; margin: auto; width: calc(100% - 32px); max-width: 460px; max-height: 90dvh; overflow: auto; border: none; border-radius: 28px; background: #fff; color: var(--ink); padding: 30px; box-shadow: 0 30px 100px #28191133; }
+.customer-dialog::backdrop { background: #241a1666; backdrop-filter: blur(5px); }
+.account-nav { display: flex; flex-direction: column; gap: 6px; }
+.account-nav a { display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 12px 16px; border-radius: 13px; font-size: 14px; color: #786c68; }
+.account-nav a[aria-current=page] { background: #633b2b; color: white; }
+.account-nav a:hover:not([aria-current=page]) { background: #f8f6f4; }
+.account-area button:focus-visible, .account-area a:focus-visible, .customer-dialog button:focus-visible { outline: 2px solid var(--cocoa); outline-offset: 4px; }
+@media (max-width: 639px) {
+ .customer-dialog { inset: auto 0 0; width: 100%; max-width: none; max-height: 92dvh; border-radius: 26px 26px 0 0; padding: 24px 24px calc(24px + env(safe-area-inset-bottom)); }
+ .account-area { padding-block: 15px 40px; }
+ .account-nav { flex-direction: row; overflow-x: auto; }
+ .account-nav a { flex-shrink: 0; padding: 10px 13px; }
+}

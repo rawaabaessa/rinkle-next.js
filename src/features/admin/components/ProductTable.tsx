@@ -3,13 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/formatPrice";
-import { adminCategories, productPrice } from "../catalogStore";
+import { productPrice } from "../catalogStore";
 import { useAdminCatalog } from "../AdminCatalogProvider";
 import type { AdminProduct } from "../types";
 import { AdminIcon } from "./AdminIcon";
 
 export function ProductTable({ products, compact = false }: { products: AdminProduct[]; compact?: boolean }) {
-  const { busy, setAvailability } = useAdminCatalog();
+  const { busy, setAvailability, categories: adminCategories } = useAdminCatalog();
   return <div className="admin-table-scroll" role="region" aria-label="جدول المنتجات" tabIndex={0}>
     <table className="admin-table"><thead><tr><th scope="col">المنتج</th><th scope="col">السعر</th>{!compact && <th scope="col">التخصيص</th>}<th scope="col">الحالة</th><th scope="col"><span className="sr-only">الإجراءات</span></th></tr></thead>
       <tbody>{products.map((product) => <tr key={product.id}><td><div className="admin-product-cell"><div className="admin-product-thumb">{product.photos[0] ? <Image src={product.photos[0].src} alt="" width={54} height={54} unoptimized={product.photos[0].src.startsWith("data:")} /> : <AdminIcon name="image" />}</div><div><Link className="admin-product-name" href={`/dashboard/products/${product.id}/edit`}>{product.name}</Link><span className="admin-table-subtitle">{adminCategories.find((category) => category.slug === product.category)?.name}{product.sizes.length > 0 && ` · ${product.sizes.length} أحجام`}</span></div></div></td>

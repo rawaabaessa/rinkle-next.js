@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { formatPrice } from "@/lib/formatPrice";
 import { useAdminCatalog } from "../AdminCatalogProvider";
-import { adminCategories } from "../catalogStore";
 import { fromProductForm, toProductForm, validateProductForm, type ProductFormState } from "../productForm";
 import type { AdminProduct } from "../types";
 import { AdminIcon } from "./AdminIcon";
@@ -20,9 +19,9 @@ function Field({ id, label, error, children, optional = false }: { id: string; l
 }
 
 function Editor({ product }: { product?: AdminProduct }) {
-  const { saveProduct, busy } = useAdminCatalog();
+  const { saveProduct, busy, categories: adminCategories } = useAdminCatalog();
   const router = useRouter();
-  const [form, setForm] = useState(() => toProductForm(product));
+  const [form, setForm] = useState(() => ({ ...toProductForm(product), category: product?.category ?? adminCategories.find((item) => item.active)?.slug ?? "" }));
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [dirty, setDirty] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -58,7 +57,7 @@ function Editor({ product }: { product?: AdminProduct }) {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (uploading || busy) return;
-    const validation = validateProductForm(form);
+    const validation = validateProductForm(form, adminCategories, product?.category);
     setErrors(validation);
     if (Object.keys(validation).length) { requestAnimationFrame(() => errorSummary.current?.focus()); return; }
     const saved = await saveProduct(fromProductForm(form, product?.id ?? crypto.randomUUID()));
@@ -78,7 +77,7 @@ function Editor({ product }: { product?: AdminProduct }) {
         <section className="admin-panel"><div className="admin-panel-heading"><div><h2><span className="admin-section-number">01</span>صور المنتج</h2><p>أول انطباع يبدأ بصورة حلوة وواضحة.</p></div><AdminIcon name="image" /></div><PhotoUploader photos={form.photos} onChange={(photos) => change("photos", photos)} error={errors.photos} onBusy={setUploading} /></section>
         <section className="admin-panel"><div className="admin-panel-heading"><div><h2><span className="admin-section-number">02</span>البيانات الأساسية</h2><p>عرّفي عملاءك على منتجك وتفاصيله.</p></div></div><div className="admin-form-fields">
           <Field id="name" label="اسم المنتج" error={errors.name}><input id="name" value={form.name} maxLength={100} onChange={(event) => change("name", event.target.value)} placeholder="مثلاً: كيك كوكيز الماربل" required {...inputError("name")} /></Field>
-          <Field id="category" label="القسم" error={errors.category}><select id="category" value={form.category} onChange={(event) => change("category", event.target.value)} {...inputError("category")}>{adminCategories.map((category) => <option key={category.slug} value={category.slug}>{category.name}</option>)}</select></Field>
+          <Field id="category" label="القسم" error={errors.category}><select id="category" value={form.category} onChange={(event) => change("category", event.target.value)} {...inputError("category")}><option value="" disabled>اختاري القسم</option>{adminCategories.filter((category) => category.active || category.slug === product?.category).map((category) => <option key={category.slug} value={category.slug}>{category.name}{!category.active ? " (متوقف)" : ""}</option>)}</select></Field>
           <Field id="description" label="وصف المنتج" error={errors.description}><textarea id="description" rows={4} value={form.description} maxLength={2000} onChange={(event) => change("description", event.target.value)} placeholder="اكتبي النكهة، المكونات، وكل شيء يميّز منتجك…" required {...inputError("description")} /><span className="admin-character-count">{form.description.length} / 2000</span></Field>
           <Field id="deliveryEstimate" label="وقت التجهيز / التوصيل المتوقع" optional><input id="deliveryEstimate" value={form.deliveryEstimate} maxLength={150} onChange={(event) => change("deliveryEstimate", event.target.value)} placeholder="مثلاً: خلال 24–48 ساعة من تأكيد الطلب" /></Field>
         </div></section>

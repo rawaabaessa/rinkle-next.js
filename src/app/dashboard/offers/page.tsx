@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { DashboardPlaceholder } from "@/features/admin/components/DashboardPlaceholder";
+import { OffersManager } from "@/features/admin/offers/OffersManager";
+import "@/features/admin/offers/offers.css";
 
 export const metadata: Metadata = { title: "العروض والكوبونات" };
 
 export default function OffersPage() {
-  return <DashboardPlaceholder title="العروض والكوبونات" description="العروض الترويجية وكوبونات الخصم." icon="offers" />;
+  return <OffersManager />;
 }

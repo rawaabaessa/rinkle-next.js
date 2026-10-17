@@ -10,6 +10,9 @@ import { siteConfig } from "@/config/site";
 import { CartContents } from "@/features/cart/components/CartContents";
 import { useCart } from "@/features/cart/useCart";
 import { categories, categoryHref } from "@/features/products/categories";
+import { UserRound } from "lucide-react";
+import { useCustomer } from "@/features/account/accountStore";
+import { useCustomerLogin } from "@/features/account/components/CustomerProvider";
 
 const focusClass = "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent";
 const iconButtonClass = `size-11 cursor-pointer items-center justify-center rounded-full text-ink transition-colors hover:bg-[#f1e8e2] motion-reduce:transition-none max-[600px]:h-[42px] max-[600px]:w-[39px] [&_svg]:size-[21px] ${focusClass}`;
@@ -17,6 +20,8 @@ const popoverClass = "absolute inset-x-0 top-full border-y border-line bg-surfac
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const customer = useCustomer();
+  const login = useCustomerLogin();
   const { count } = useCart();
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -36,6 +41,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-1.5 max-[600px]:gap-0">
+          {customer ? <Link href="/account" aria-label="حسابي" className={`hidden md:inline-flex ${iconButtonClass}`} onClick={() => { setSearchOpen(false); setCartOpen(false); setMenuOpen(false); }}><UserRound /></Link> : <button type="button" aria-label="تسجيل الدخول" className={`hidden md:inline-flex ${iconButtonClass}`} onClick={() => { setSearchOpen(false); setCartOpen(false); setMenuOpen(false); login(); }}><UserRound /></button>}
           <button className={`inline-flex ${iconButtonClass}`} type="button" aria-label={searchOpen ? "إغلاق البحث" : "فتح البحث"} aria-expanded={searchOpen} onClick={() => { setSearchOpen(!searchOpen); setCartOpen(false); setMenuOpen(false); }}>{searchOpen ? <CloseIcon /> : <SearchIcon />}</button>
           <button className={`relative hidden md:inline-flex ${iconButtonClass}`} type="button" aria-label={cartOpen ? "إغلاق السلة" : `فتح السلة، ${count} قطعة`} aria-expanded={cartOpen} onClick={() => { setCartOpen(!cartOpen); setSearchOpen(false); setMenuOpen(false); }}><BagIcon />{count > 0 && <span className="absolute -top-0.5 -end-0.5 grid min-w-5 h-5 place-items-center rounded-full bg-cocoa px-1 text-[10px] text-white">{count}</span>}</button>
           <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" className={`ms-[11px] inline-flex min-h-[42px] items-center justify-center rounded-xl border border-line bg-white px-[19px] text-sm font-bold text-ink shadow-[0_3px_12px_#4c211207] transition-colors hover:border-[#d5b7a7] hover:bg-[#f4e9e2] motion-reduce:transition-none max-[1100px]:hidden ${focusClass}`}>تواصلي معنا</a>

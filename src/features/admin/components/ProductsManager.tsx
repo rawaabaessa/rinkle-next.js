@@ -3,15 +3,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useAdminCatalog } from "../AdminCatalogProvider";
-import { adminCategories } from "../catalogStore";
 import { numberLabel } from "../dashboardPreviewData";
 import { AdminIcon, type AdminIconName } from "./AdminIcon";
 import { ProductTable } from "./ProductTable";
 
-export function ProductsManager() {
-  const { products, loading, error } = useAdminCatalog();
+export function ProductsManager({ initialCategory = "all" }: { initialCategory?: string }) {
+  const { products, categories: adminCategories, loading, error } = useAdminCatalog();
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState(initialCategory);
   const [status, setStatus] = useState("all");
   const normalize = (value: string) => value.replace(/[أإآ]/g, "ا").replace(/[\u064B-\u065F\u0640]/g, "").toLowerCase().trim();
   const visible = products.filter((product) => (category === "all" || product.category === category) && (status === "all" || product.available === (status === "available")) && normalize(product.name).includes(normalize(query)));

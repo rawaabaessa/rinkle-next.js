@@ -10,8 +10,12 @@ import { EmptyCart } from "@/features/cart/components/EmptyCart";
 import { fieldClass, focus, panelClass } from "@/components/ui/controlStyles";
 import { OrderIcon } from "@/components/ui/OrderIcon";
 import { CartSummary } from "@/features/cart/components/CartSummary";
+import { useRouter } from "next/navigation";
+import { useCustomer } from "@/features/account/accountStore";
+import { useCustomerLogin } from "@/features/account/components/CustomerProvider";
 
 export function CartPage() {
+  const customer = useCustomer(); const login = useCustomerLogin(); const router = useRouter();
   const { items, count, total } = useCart();
   const { draft, updateDraft } = useOrderDraft();
   if (!items.length) return <EmptyCart />;
@@ -109,7 +113,7 @@ export function CartPage() {
             المتابعة.
           </p>
         ) : (
-          <Button href="/checkout" className="mt-6">
+          <Button onClick={() => customer ? router.push("/checkout") : login("/checkout")} className="mt-6">
             متابعة لإتمام الطلب
             <ArrowLeftIcon className="size-5" />
           </Button>

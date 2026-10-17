@@ -5,7 +5,7 @@ import { useRef, useState, type ChangeEvent } from "react";
 import type { AdminPhoto } from "../types";
 import { AdminIcon } from "./AdminIcon";
 
-async function readPhoto(file: File): Promise<AdminPhoto> {
+export async function readPhoto(file: File): Promise<AdminPhoto> {
   if (!file.size || file.size > 5 * 1024 * 1024) throw new Error("حجم كل صورة يجب أن يكون أقل من أو يساوي 5 ميغابايت، وألا تكون فارغة.");
   if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) throw new Error("اختاري صورًا بصيغة JPG أو PNG أو WebP فقط.");
   const src = await new Promise<string>((resolve, reject) => {
