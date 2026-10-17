@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { DashboardPlaceholder } from "@/features/admin/components/DashboardPlaceholder";
+import { CategoriesManager } from "@/features/admin/categories/CategoriesManager";
 
 export const metadata: Metadata = { title: "الأقسام" };
 
 export default function CategoriesPage() {
-  return <DashboardPlaceholder title="الأقسام" description="تنظيم أقسام المنتجات وترتيب ظهورها في المتجر." icon="categories" />;
+  return <CategoriesManager />;
 }

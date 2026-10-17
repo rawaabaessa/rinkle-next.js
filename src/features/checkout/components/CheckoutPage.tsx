@@ -20,11 +20,15 @@ import { EmptyCart } from "@/features/cart/components/EmptyCart";
 import { focus, panelClass } from "@/components/ui/controlStyles";
 import { OrderIcon } from "@/components/ui/OrderIcon";
 import { CartSummary } from "@/features/cart/components/CartSummary";
+import { CheckoutAddresses } from "@/features/account/components/CheckoutAddresses";
+import { saveAddress, updateProfile, useCustomer } from "@/features/account/accountStore";
 
 
 
 
 export function CheckoutPage() {
+  const customer = useCustomer();
+  const [rememberAddress, setRememberAddress] = useState(false);
   const { items, count, total } = useCart();
   const { draft, receipt, updateDraft, setReceipt } = useOrderDraft();
   const { areas, loading: areasLoading, error: areasError, retry: retryAreas } = useDeliveryAreas();
@@ -87,6 +91,12 @@ export function CheckoutPage() {
         retryAreas(); setFormError("تغيّرت بيانات أو رسوم المنطقة. راجعي الإجمالي المحدّث ثم اضغطي مراجعة الطلب مجددًا."); return;
       }
       setDeliveryReview({ ...quote, productsTotal: total });
+      if (customer) {
+        updateProfile({ name: draft.buyerName.trim() });
+        if (rememberAddress && !draft.isGift && !customer.addresses.some((address) => address.areaId === draft.deliveryAreaId && address.district === draft.district.trim() && address.address === draft.address.trim())) {
+          saveAddress({ label: "عنوان الطلب", areaId: draft.deliveryAreaId, district: draft.district.trim(), address: draft.address.trim() });
+        }
+      }
       setFormError(""); review.current?.showModal();
     } catch (error) { retryAreas(); setFormError(error instanceof Error ? error.message : "تعذّر التحقق من رسوم التوصيل. حاولي مجددًا."); }
     finally { deliveryChecking.current = false; setCheckingDelivery(false); }
@@ -103,7 +113,9 @@ export function CheckoutPage() {
     <form id="checkout-form" ref={form} onSubmit={submit} noValidate className="min-w-0 space-y-5">
       {formError && <p role="alert" className="rounded-xl border border-accent/30 bg-surface p-4 text-sm text-accent">{formError}</p>}
       <CustomerForm inputProps={inputProps} />
+      <CheckoutAddresses areas={areas} disabled={areasLoading || Boolean(areasError)} />
       <DeliveryForm inputProps={inputProps} draft={draft} areas={areas} loading={areasLoading} error={areasError} retry={retryAreas} />
+      {customer && !draft.isGift && <label className="flex min-h-11 items-center gap-3 px-2 text-sm"><input type="checkbox" checked={rememberAddress} onChange={(event) => setRememberAddress(event.target.checked)} className="size-4 accent-[#633b2b]" />حفظ هذا العنوان في حسابي عند مراجعة الطلب</label>}
       <section className={panelClass} aria-labelledby="payment-title"><h2 id="payment-title" className="text-lg font-bold"><span className="me-2 text-accent">03</span>طريقة الدفع</h2><p className="mt-2 mb-5 text-sm text-muted">اختاري الطريقة المناسبة لك.</p>
         <fieldset><legend className="sr-only">اختيار طريقة الدفع</legend><div className="grid gap-3 sm:grid-cols-2">{([{ value: "bank", label: "حوالة بنكية", hint: "إرفاق سند التحويل", icon: "bank" }, { value: "cod", label: "الدفع عند الاستلام", hint: "نقدًا عند وصول الطلب", icon: "cash" }] as const).map((option) => <label key={option.value} className="relative cursor-pointer"><input type="radio" name="payment" value={option.value} checked={draft.payment === option.value} onChange={() => { updateDraft({ payment: option.value }); setReceiptError(""); }} className="peer sr-only" /><span className="flex min-h-28 items-start gap-3 rounded-2xl border border-line bg-page p-4 text-cocoa peer-checked:border-cocoa peer-checked:bg-cocoa/5 peer-checked:ring-1 peer-checked:ring-cocoa peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-accent"><OrderIcon kind={option.icon} className="mt-1 size-6 shrink-0" /><span className="min-w-0"><span className="block text-sm font-bold">{option.label}</span><span className="mt-2 block text-xs leading-relaxed text-muted">{option.hint}</span><span className="mt-2 block text-xs font-medium">{draft.payment === option.value ? "✓ تم الاختيار" : "اختيار"}</span></span></span></label>)}</div></fieldset>
         {draft.payment === "bank" ? <div className="mt-5 space-y-4"><div className="rounded-xl bg-cocoa/5 p-4 text-sm leading-loose text-cocoa"><p className="font-bold">بيانات الحساب البنكي تُضاف قريبًا</p><p className="text-xs text-muted">هذه معاينة لطريقة الدفع. لا توجد حوالة أو دفعة مطلوبة الآن.</p></div>

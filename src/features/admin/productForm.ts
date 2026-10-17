@@ -1,4 +1,4 @@
-import { adminCategories } from "./catalogStore";
+import type { AdminCategory } from "./categories/categoryData";
 import type { AdminProduct, AdminPhoto } from "./types";
 
 export type ProductFormState = {
@@ -22,11 +22,11 @@ export function toProductForm(product?: AdminProduct): ProductFormState {
 function validPrice(value: string, allowZero = false) {
   return value.trim() !== "" && Number.isFinite(Number(value)) && (allowZero ? Number(value) >= 0 : Number(value) > 0);
 }
-export function validateProductForm(form: ProductFormState) {
+export function validateProductForm(form: ProductFormState, categories: AdminCategory[], currentCategory?: string) {
   const errors: Record<string, string> = {};
   if (!form.name.trim()) errors.name = "اكتبي اسم المنتج.";
   if (!form.description.trim()) errors.description = "أضيفي وصفًا للمنتج.";
-  if (!adminCategories.some((category) => category.slug === form.category)) errors.category = "اختاري قسمًا للمنتج.";
+  if (!categories.some((category) => category.slug === form.category && (category.active || category.slug === currentCategory))) errors.category = "اختاري قسمًا مفعّلًا للمنتج.";
   if (!form.photos.length) errors.photos = "أضيفي صورة واحدة على الأقل.";
   if (form.hasSizes) {
     if (!form.sizes.length) errors.sizes = "أضيفي حجمًا واحدًا على الأقل، أو أوقفي خيار الأحجام.";

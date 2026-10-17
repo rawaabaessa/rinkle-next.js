@@ -1,7 +1,7 @@
-import { products, productCategories } from "@/features/products/data";
+import { products } from "@/features/products/data";
+import { categoryFormSchema, seedCategories, type AdminCategory } from "./categories/categoryData";
 import type { AdminProduct } from "./types";
 
-export const adminCategories = productCategories.filter((category) => category.slug !== "all" && category.slug !== "available-today");
 export const seedProducts: AdminProduct[] = products.map((product) => ({
   id: product.id,
   name: product.name,
@@ -33,25 +33,32 @@ function openDatabase(): Promise<IDBDatabase> {
 }
 
 // A single read/write transaction prevents lost updates between dashboard tabs.
-export async function catalogTransaction(change?: (items: AdminProduct[]) => AdminProduct[]): Promise<AdminProduct[]> {
+export type CatalogState = { products: AdminProduct[]; categories: AdminCategory[] };
+export async function catalogTransaction(change?: (state: CatalogState) => CatalogState): Promise<CatalogState> {
   const database = await openDatabase();
   try {
     return await new Promise((resolve, reject) => {
       const transaction = database.transaction("catalog", change ? "readwrite" : "readonly");
       const store = transaction.objectStore("catalog");
       const request = store.get("products");
-      let result: AdminProduct[] = [];
-      request.onsuccess = () => {
-        const saved = request.result;
-        if (saved !== undefined && (!Array.isArray(saved) || !saved.every((item: AdminProduct) => item && typeof item.id === "string" && Array.isArray(item.photos) && Array.isArray(item.sizes) && item.writing && item.candle))) {
-          transaction.abort();
-          return;
-        }
-        result = change ? change(saved ?? seedProducts) : saved ?? seedProducts;
-        if (change) store.put(result, "products");
+      const categoryRequest = store.get("categories-v1");
+      let result: CatalogState;
+      let failure: unknown;
+      categoryRequest.onsuccess = () => {
+        try {
+          const saved = request.result;
+          if (saved !== undefined && (!Array.isArray(saved) || !saved.every((item: AdminProduct) => item && typeof item.id === "string" && Array.isArray(item.photos) && Array.isArray(item.sizes) && item.writing && item.candle))) {
+            throw new Error("تعذّر قراءة المنتجات المحفوظة.");
+          }
+          const categories = categoryRequest.result ?? seedCategories;
+          if (!Array.isArray(categories) || !categories.every((item: AdminCategory) => typeof item?.slug === "string" && categoryFormSchema.safeParse(item).success)) throw new Error("تعذّر قراءة الأقسام المحفوظة.");
+          const state = { products: saved ?? seedProducts, categories };
+          result = change ? change(state) : state;
+          if (change) { store.put(result.products, "products"); store.put(result.categories, "categories-v1"); }
+        } catch (reason) { failure = reason; transaction.abort(); }
       };
       transaction.oncomplete = () => resolve(result);
-      transaction.onabort = () => reject(transaction.error ?? new Error("تعذّر حفظ البيانات المحلية."));
+      transaction.onabort = () => reject(failure ?? transaction.error ?? new Error("تعذّر حفظ البيانات المحلية."));
       transaction.onerror = () => reject(transaction.error);
     });
   } finally { database.close(); }
