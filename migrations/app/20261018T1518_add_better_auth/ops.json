@@ -1,0 +1,1418 @@
+[
+  {
+    "id": "table.auth_rate_limits",
+    "label": "Create table \"auth_rate_limits\"",
+    "summary": "Creates table \"auth_rate_limits\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "auth_rate_limits"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"auth_rate_limits\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"auth_rate_limits\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"auth_rate_limits\"",
+        "sql": "CREATE TABLE \"public\".\"auth_rate_limits\" (\n  \"count\" int4 NOT NULL,\n  \"expires_at\" timestamptz NOT NULL,\n  \"key\" text NOT NULL,\n  PRIMARY KEY (\"key\"),\n  CONSTRAINT \"auth_rate_limits_positive_2202e1ab\" CHECK (count > 0)\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"auth_rate_limits\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"auth_rate_limits\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.customer_accounts",
+    "label": "Create table \"customer_accounts\"",
+    "summary": "Creates table \"customer_accounts\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "customer_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"customer_accounts\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"customer_accounts\"",
+        "sql": "CREATE TABLE \"public\".\"customer_accounts\" (\n  \"access_token\" text,\n  \"access_token_expires_at\" timestamptz,\n  \"account_id\" text NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"id_token\" text,\n  \"password\" text,\n  \"provider_id\" text NOT NULL,\n  \"refresh_token\" text,\n  \"refresh_token_expires_at\" timestamptz,\n  \"scope\" text,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"user_id\" uuid NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"customer_accounts\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.customer_sessions",
+    "label": "Create table \"customer_sessions\"",
+    "summary": "Creates table \"customer_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "customer_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"customer_sessions\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"customer_sessions\"",
+        "sql": "CREATE TABLE \"public\".\"customer_sessions\" (\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"expires_at\" timestamptz NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"ip_address\" text,\n  \"token\" text NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"user_agent\" text,\n  \"user_id\" uuid NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"customer_sessions\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_sessions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.customer_verifications",
+    "label": "Create table \"customer_verifications\"",
+    "summary": "Creates table \"customer_verifications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "customer_verifications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"customer_verifications\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_verifications\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"customer_verifications\"",
+        "sql": "CREATE TABLE \"public\".\"customer_verifications\" (\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"expires_at\" timestamptz NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"identifier\" text NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"value\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"customer_verifications\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_verifications\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.staff_accounts",
+    "label": "Create table \"staff_accounts\"",
+    "summary": "Creates table \"staff_accounts\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "staff_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"staff_accounts\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"staff_accounts\"",
+        "sql": "CREATE TABLE \"public\".\"staff_accounts\" (\n  \"access_token\" text,\n  \"access_token_expires_at\" timestamptz,\n  \"account_id\" text NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"id_token\" text,\n  \"password\" text,\n  \"provider_id\" text NOT NULL,\n  \"refresh_token\" text,\n  \"refresh_token_expires_at\" timestamptz,\n  \"scope\" text,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"user_id\" uuid NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"staff_accounts\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.staff_sessions",
+    "label": "Create table \"staff_sessions\"",
+    "summary": "Creates table \"staff_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "staff_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"staff_sessions\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"staff_sessions\"",
+        "sql": "CREATE TABLE \"public\".\"staff_sessions\" (\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"expires_at\" timestamptz NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"ip_address\" text,\n  \"token\" text NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"user_agent\" text,\n  \"user_id\" uuid NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"staff_sessions\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_sessions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.staff_verifications",
+    "label": "Create table \"staff_verifications\"",
+    "summary": "Creates table \"staff_verifications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "staff_verifications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"staff_verifications\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_verifications\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"staff_verifications\"",
+        "sql": "CREATE TABLE \"public\".\"staff_verifications\" (\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"expires_at\" timestamptz NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"identifier\" text NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"value\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"staff_verifications\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_verifications\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.staff_members.email_verified",
+    "label": "Add column \"email_verified\" to \"staff_members\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "email_verified",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"email_verified\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "staff_members",
+          "email_verified"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"email_verified\"",
+        "sql": "ALTER TABLE \"public\".\"staff_members\" ADD COLUMN \"email_verified\" bool DEFAULT false NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"email_verified\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "staff_members",
+          "email_verified"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.staff_members.image",
+    "label": "Add column \"image\" to \"staff_members\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "image",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"image\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "staff_members",
+          "image"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"image\"",
+        "sql": "ALTER TABLE \"public\".\"staff_members\" ADD COLUMN \"image\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"image\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "staff_members",
+          "image"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.users.auth_email",
+    "label": "Add column \"auth_email\" to \"users\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "auth_email",
+        "table": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"auth_email\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "auth_email"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"auth_email\"",
+        "sql": "ALTER TABLE \"public\".\"users\" ADD COLUMN \"auth_email\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"auth_email\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "auth_email"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.users.email_verified",
+    "label": "Add column \"email_verified\" to \"users\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "email_verified",
+        "table": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"email_verified\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "email_verified"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"email_verified\"",
+        "sql": "ALTER TABLE \"public\".\"users\" ADD COLUMN \"email_verified\" bool DEFAULT false NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"email_verified\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "email_verified"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.users.image",
+    "label": "Add column \"image\" to \"users\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "image",
+        "table": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"image\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "image"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"image\"",
+        "sql": "ALTER TABLE \"public\".\"users\" ADD COLUMN \"image\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"image\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "image"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.users.phone_verified",
+    "label": "Add column \"phone_verified\" to \"users\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "phone_verified",
+        "table": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"phone_verified\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "phone_verified"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"phone_verified\"",
+        "sql": "ALTER TABLE \"public\".\"users\" ADD COLUMN \"phone_verified\" bool DEFAULT false NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"phone_verified\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "users",
+          "phone_verified"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.customer_accounts.customer_accounts_provider_id_account_id_key",
+    "label": "Add unique constraint on \"customer_accounts\" (provider_id, account_id)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "customer_accounts_provider_id_account_id_key",
+        "table": "customer_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"customer_accounts_provider_id_account_id_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_accounts_provider_id_account_id_key",
+          "public",
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"customer_accounts_provider_id_account_id_key\"",
+        "sql": "ALTER TABLE \"public\".\"customer_accounts\" ADD CONSTRAINT \"customer_accounts_provider_id_account_id_key\" UNIQUE (\"provider_id\", \"account_id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"customer_accounts_provider_id_account_id_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_accounts_provider_id_account_id_key",
+          "public",
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.customer_accounts.customer_accounts_user_id_provider_id_key",
+    "label": "Add unique constraint on \"customer_accounts\" (user_id, provider_id)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "customer_accounts_user_id_provider_id_key",
+        "table": "customer_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"customer_accounts_user_id_provider_id_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_accounts_user_id_provider_id_key",
+          "public",
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"customer_accounts_user_id_provider_id_key\"",
+        "sql": "ALTER TABLE \"public\".\"customer_accounts\" ADD CONSTRAINT \"customer_accounts_user_id_provider_id_key\" UNIQUE (\"user_id\", \"provider_id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"customer_accounts_user_id_provider_id_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_accounts_user_id_provider_id_key",
+          "public",
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.customer_sessions.customer_sessions_token_key",
+    "label": "Add unique constraint on \"customer_sessions\" (token)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "customer_sessions_token_key",
+        "table": "customer_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"customer_sessions_token_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_sessions_token_key",
+          "public",
+          "\"public\".\"customer_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"customer_sessions_token_key\"",
+        "sql": "ALTER TABLE \"public\".\"customer_sessions\" ADD CONSTRAINT \"customer_sessions_token_key\" UNIQUE (\"token\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"customer_sessions_token_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_sessions_token_key",
+          "public",
+          "\"public\".\"customer_sessions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.staff_accounts.staff_accounts_provider_id_account_id_key",
+    "label": "Add unique constraint on \"staff_accounts\" (provider_id, account_id)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "staff_accounts_provider_id_account_id_key",
+        "table": "staff_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"staff_accounts_provider_id_account_id_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_accounts_provider_id_account_id_key",
+          "public",
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"staff_accounts_provider_id_account_id_key\"",
+        "sql": "ALTER TABLE \"public\".\"staff_accounts\" ADD CONSTRAINT \"staff_accounts_provider_id_account_id_key\" UNIQUE (\"provider_id\", \"account_id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"staff_accounts_provider_id_account_id_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_accounts_provider_id_account_id_key",
+          "public",
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.staff_accounts.staff_accounts_user_id_provider_id_key",
+    "label": "Add unique constraint on \"staff_accounts\" (user_id, provider_id)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "staff_accounts_user_id_provider_id_key",
+        "table": "staff_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"staff_accounts_user_id_provider_id_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_accounts_user_id_provider_id_key",
+          "public",
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"staff_accounts_user_id_provider_id_key\"",
+        "sql": "ALTER TABLE \"public\".\"staff_accounts\" ADD CONSTRAINT \"staff_accounts_user_id_provider_id_key\" UNIQUE (\"user_id\", \"provider_id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"staff_accounts_user_id_provider_id_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_accounts_user_id_provider_id_key",
+          "public",
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.staff_sessions.staff_sessions_token_key",
+    "label": "Add unique constraint on \"staff_sessions\" (token)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "staff_sessions_token_key",
+        "table": "staff_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"staff_sessions_token_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_sessions_token_key",
+          "public",
+          "\"public\".\"staff_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"staff_sessions_token_key\"",
+        "sql": "ALTER TABLE \"public\".\"staff_sessions\" ADD CONSTRAINT \"staff_sessions_token_key\" UNIQUE (\"token\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"staff_sessions_token_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_sessions_token_key",
+          "public",
+          "\"public\".\"staff_sessions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.users.users_auth_email_key",
+    "label": "Add unique constraint on \"users\" (auth_email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "users_auth_email_key",
+        "table": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"users_auth_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "users_auth_email_key",
+          "public",
+          "\"public\".\"users\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"users_auth_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT \"users_auth_email_key\" UNIQUE (\"auth_email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"users_auth_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "users_auth_email_key",
+          "public",
+          "\"public\".\"users\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.auth_rate_limits.auth_rate_limits_expires_at_idx_35365ada",
+    "label": "Create index \"auth_rate_limits_expires_at_idx_35365ada\" on \"auth_rate_limits\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "auth_rate_limits_expires_at_idx_35365ada",
+        "table": "auth_rate_limits"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"auth_rate_limits_expires_at_idx_35365ada\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"auth_rate_limits_expires_at_idx_35365ada\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"auth_rate_limits_expires_at_idx_35365ada\"",
+        "sql": "CREATE INDEX \"auth_rate_limits_expires_at_idx_35365ada\" ON \"public\".\"auth_rate_limits\" (\"expires_at\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"auth_rate_limits_expires_at_idx_35365ada\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"auth_rate_limits_expires_at_idx_35365ada\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.customer_accounts.customer_accounts_user_id_idx_6c952402",
+    "label": "Create index \"customer_accounts_user_id_idx_6c952402\" on \"customer_accounts\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "customer_accounts_user_id_idx_6c952402",
+        "table": "customer_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"customer_accounts_user_id_idx_6c952402\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_accounts_user_id_idx_6c952402\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"customer_accounts_user_id_idx_6c952402\"",
+        "sql": "CREATE INDEX \"customer_accounts_user_id_idx_6c952402\" ON \"public\".\"customer_accounts\" (\"user_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"customer_accounts_user_id_idx_6c952402\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_accounts_user_id_idx_6c952402\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.customer_sessions.customer_sessions_expires_at_idx_35365ada",
+    "label": "Create index \"customer_sessions_expires_at_idx_35365ada\" on \"customer_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "customer_sessions_expires_at_idx_35365ada",
+        "table": "customer_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"customer_sessions_expires_at_idx_35365ada\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_sessions_expires_at_idx_35365ada\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"customer_sessions_expires_at_idx_35365ada\"",
+        "sql": "CREATE INDEX \"customer_sessions_expires_at_idx_35365ada\" ON \"public\".\"customer_sessions\" (\"expires_at\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"customer_sessions_expires_at_idx_35365ada\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_sessions_expires_at_idx_35365ada\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.customer_sessions.customer_sessions_user_id_idx_6c952402",
+    "label": "Create index \"customer_sessions_user_id_idx_6c952402\" on \"customer_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "customer_sessions_user_id_idx_6c952402",
+        "table": "customer_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"customer_sessions_user_id_idx_6c952402\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_sessions_user_id_idx_6c952402\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"customer_sessions_user_id_idx_6c952402\"",
+        "sql": "CREATE INDEX \"customer_sessions_user_id_idx_6c952402\" ON \"public\".\"customer_sessions\" (\"user_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"customer_sessions_user_id_idx_6c952402\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_sessions_user_id_idx_6c952402\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.customer_verifications.customer_verifications_expires_at_idx_35365ada",
+    "label": "Create index \"customer_verifications_expires_at_idx_35365ada\" on \"customer_verifications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "customer_verifications_expires_at_idx_35365ada",
+        "table": "customer_verifications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"customer_verifications_expires_at_idx_35365ada\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_verifications_expires_at_idx_35365ada\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"customer_verifications_expires_at_idx_35365ada\"",
+        "sql": "CREATE INDEX \"customer_verifications_expires_at_idx_35365ada\" ON \"public\".\"customer_verifications\" (\"expires_at\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"customer_verifications_expires_at_idx_35365ada\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_verifications_expires_at_idx_35365ada\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.customer_verifications.customer_verifications_identifier_idx_79a0dbb3",
+    "label": "Create index \"customer_verifications_identifier_idx_79a0dbb3\" on \"customer_verifications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "customer_verifications_identifier_idx_79a0dbb3",
+        "table": "customer_verifications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"customer_verifications_identifier_idx_79a0dbb3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_verifications_identifier_idx_79a0dbb3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"customer_verifications_identifier_idx_79a0dbb3\"",
+        "sql": "CREATE INDEX \"customer_verifications_identifier_idx_79a0dbb3\" ON \"public\".\"customer_verifications\" (\"identifier\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"customer_verifications_identifier_idx_79a0dbb3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"customer_verifications_identifier_idx_79a0dbb3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_accounts.staff_accounts_user_id_idx_6c952402",
+    "label": "Create index \"staff_accounts_user_id_idx_6c952402\" on \"staff_accounts\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_accounts_user_id_idx_6c952402",
+        "table": "staff_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_accounts_user_id_idx_6c952402\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_accounts_user_id_idx_6c952402\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_accounts_user_id_idx_6c952402\"",
+        "sql": "CREATE INDEX \"staff_accounts_user_id_idx_6c952402\" ON \"public\".\"staff_accounts\" (\"user_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_accounts_user_id_idx_6c952402\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_accounts_user_id_idx_6c952402\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_sessions.staff_sessions_expires_at_idx_35365ada",
+    "label": "Create index \"staff_sessions_expires_at_idx_35365ada\" on \"staff_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_sessions_expires_at_idx_35365ada",
+        "table": "staff_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_sessions_expires_at_idx_35365ada\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_sessions_expires_at_idx_35365ada\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_sessions_expires_at_idx_35365ada\"",
+        "sql": "CREATE INDEX \"staff_sessions_expires_at_idx_35365ada\" ON \"public\".\"staff_sessions\" (\"expires_at\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_sessions_expires_at_idx_35365ada\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_sessions_expires_at_idx_35365ada\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_sessions.staff_sessions_user_id_idx_6c952402",
+    "label": "Create index \"staff_sessions_user_id_idx_6c952402\" on \"staff_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_sessions_user_id_idx_6c952402",
+        "table": "staff_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_sessions_user_id_idx_6c952402\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_sessions_user_id_idx_6c952402\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_sessions_user_id_idx_6c952402\"",
+        "sql": "CREATE INDEX \"staff_sessions_user_id_idx_6c952402\" ON \"public\".\"staff_sessions\" (\"user_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_sessions_user_id_idx_6c952402\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_sessions_user_id_idx_6c952402\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_verifications.staff_verifications_expires_at_idx_35365ada",
+    "label": "Create index \"staff_verifications_expires_at_idx_35365ada\" on \"staff_verifications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_verifications_expires_at_idx_35365ada",
+        "table": "staff_verifications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_verifications_expires_at_idx_35365ada\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_verifications_expires_at_idx_35365ada\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_verifications_expires_at_idx_35365ada\"",
+        "sql": "CREATE INDEX \"staff_verifications_expires_at_idx_35365ada\" ON \"public\".\"staff_verifications\" (\"expires_at\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_verifications_expires_at_idx_35365ada\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_verifications_expires_at_idx_35365ada\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_verifications.staff_verifications_identifier_idx_79a0dbb3",
+    "label": "Create index \"staff_verifications_identifier_idx_79a0dbb3\" on \"staff_verifications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_verifications_identifier_idx_79a0dbb3",
+        "table": "staff_verifications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_verifications_identifier_idx_79a0dbb3\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_verifications_identifier_idx_79a0dbb3\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_verifications_identifier_idx_79a0dbb3\"",
+        "sql": "CREATE INDEX \"staff_verifications_identifier_idx_79a0dbb3\" ON \"public\".\"staff_verifications\" (\"identifier\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_verifications_identifier_idx_79a0dbb3\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_verifications_identifier_idx_79a0dbb3\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.customer_accounts.customer_accounts_user_id_fkey",
+    "label": "Add foreign key \"customer_accounts_user_id_fkey\" on \"customer_accounts\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "customer_accounts_user_id_fkey",
+        "table": "customer_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"customer_accounts_user_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_accounts_user_id_fkey",
+          "public",
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"customer_accounts_user_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"customer_accounts\"\nADD CONSTRAINT \"customer_accounts_user_id_fkey\"\nFOREIGN KEY (\"user_id\")\nREFERENCES \"public\".\"users\" (\"id\")\nON DELETE CASCADE\nON UPDATE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"customer_accounts_user_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_accounts_user_id_fkey",
+          "public",
+          "\"public\".\"customer_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.customer_sessions.customer_sessions_user_id_fkey",
+    "label": "Add foreign key \"customer_sessions_user_id_fkey\" on \"customer_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "customer_sessions_user_id_fkey",
+        "table": "customer_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"customer_sessions_user_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_sessions_user_id_fkey",
+          "public",
+          "\"public\".\"customer_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"customer_sessions_user_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"customer_sessions\"\nADD CONSTRAINT \"customer_sessions_user_id_fkey\"\nFOREIGN KEY (\"user_id\")\nREFERENCES \"public\".\"users\" (\"id\")\nON DELETE CASCADE\nON UPDATE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"customer_sessions_user_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "customer_sessions_user_id_fkey",
+          "public",
+          "\"public\".\"customer_sessions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.staff_accounts.staff_accounts_user_id_fkey",
+    "label": "Add foreign key \"staff_accounts_user_id_fkey\" on \"staff_accounts\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "staff_accounts_user_id_fkey",
+        "table": "staff_accounts"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"staff_accounts_user_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_accounts_user_id_fkey",
+          "public",
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"staff_accounts_user_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"staff_accounts\"\nADD CONSTRAINT \"staff_accounts_user_id_fkey\"\nFOREIGN KEY (\"user_id\")\nREFERENCES \"public\".\"staff_members\" (\"id\")\nON DELETE CASCADE\nON UPDATE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"staff_accounts_user_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_accounts_user_id_fkey",
+          "public",
+          "\"public\".\"staff_accounts\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.staff_sessions.staff_sessions_user_id_fkey",
+    "label": "Add foreign key \"staff_sessions_user_id_fkey\" on \"staff_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "staff_sessions_user_id_fkey",
+        "table": "staff_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"staff_sessions_user_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_sessions_user_id_fkey",
+          "public",
+          "\"public\".\"staff_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"staff_sessions_user_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"staff_sessions\"\nADD CONSTRAINT \"staff_sessions_user_id_fkey\"\nFOREIGN KEY (\"user_id\")\nREFERENCES \"public\".\"staff_members\" (\"id\")\nON DELETE CASCADE\nON UPDATE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"staff_sessions_user_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_sessions_user_id_fkey",
+          "public",
+          "\"public\".\"staff_sessions\""
+        ]
+      }
+    ]
+  }
+]

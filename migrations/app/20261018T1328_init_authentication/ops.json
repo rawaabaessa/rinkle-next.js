@@ -1,0 +1,742 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.permissions",
+    "label": "Create table \"permissions\"",
+    "summary": "Creates table \"permissions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "permissions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"permissions\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"permissions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"permissions\"",
+        "sql": "CREATE TABLE \"public\".\"permissions\" (\n  \"code\" text NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"description\" text,\n  \"name\" character varying(100) NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"code\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"permissions\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"permissions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.role_permissions",
+    "label": "Create table \"role_permissions\"",
+    "summary": "Creates table \"role_permissions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "role_permissions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"role_permissions\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"role_permissions\"",
+        "sql": "CREATE TABLE \"public\".\"role_permissions\" (\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"permission_code\" text NOT NULL,\n  \"role_code\" text NOT NULL,\n  PRIMARY KEY (\"role_code\", \"permission_code\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"role_permissions\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.roles",
+    "label": "Create table \"roles\"",
+    "summary": "Creates table \"roles\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "roles"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"roles\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roles\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"roles\"",
+        "sql": "CREATE TABLE \"public\".\"roles\" (\n  \"code\" text NOT NULL,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"description\" text,\n  \"name\" character varying(80) NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"code\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"roles\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"roles\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.staff_members",
+    "label": "Create table \"staff_members\"",
+    "summary": "Creates table \"staff_members\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"staff_members\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"staff_members\"",
+        "sql": "CREATE TABLE \"public\".\"staff_members\" (\n  \"auth_provider\" text,\n  \"auth_subject\" text,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" character varying(150) NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"last_login_at\" timestamptz,\n  \"name\" character varying(80) NOT NULL,\n  \"role_code\" text NOT NULL,\n  \"status\" text DEFAULT 'invited' NOT NULL,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"staff_members_auth_identity_pair_1317e15e\" CHECK ((auth_provider IS NULL) = (auth_subject IS NULL)),\n  CONSTRAINT \"staff_members_email_lowercase_9b410a78\" CHECK (email = lower(email)),\n  CONSTRAINT \"staff_members_owner_active_d2f51121\" CHECK (role_code <> 'owner' OR status = 'active'),\n  CONSTRAINT \"staff_members_status_8e0d6579\" CHECK (status IN ('invited', 'active', 'paused'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"staff_members\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.users",
+    "label": "Create table \"users\"",
+    "summary": "Creates table \"users\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"users\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"users\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"users\"",
+        "sql": "CREATE TABLE \"public\".\"users\" (\n  \"auth_provider\" text,\n  \"auth_subject\" text,\n  \"created_at\" timestamptz DEFAULT (now()) NOT NULL,\n  \"deleted_at\" timestamptz,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"last_login_at\" timestamptz,\n  \"name\" character varying(100),\n  \"phone\" character varying(16) NOT NULL,\n  \"phone_verified_at\" timestamptz,\n  \"updated_at\" timestamptz DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"users_auth_identity_pair_1317e15e\" CHECK ((auth_provider IS NULL) = (auth_subject IS NULL))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"users\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"users\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.staff_members.staff_members_email_key",
+    "label": "Add unique constraint on \"staff_members\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "staff_members_email_key",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"staff_members_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_members_email_key",
+          "public",
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"staff_members_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"staff_members\" ADD CONSTRAINT \"staff_members_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"staff_members_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_members_email_key",
+          "public",
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.staff_members.staff_members_auth_provider_auth_subject_key",
+    "label": "Add unique constraint on \"staff_members\" (auth_provider, auth_subject)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "staff_members_auth_provider_auth_subject_key",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"staff_members_auth_provider_auth_subject_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_members_auth_provider_auth_subject_key",
+          "public",
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"staff_members_auth_provider_auth_subject_key\"",
+        "sql": "ALTER TABLE \"public\".\"staff_members\" ADD CONSTRAINT \"staff_members_auth_provider_auth_subject_key\" UNIQUE (\"auth_provider\", \"auth_subject\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"staff_members_auth_provider_auth_subject_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_members_auth_provider_auth_subject_key",
+          "public",
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.users.users_phone_key",
+    "label": "Add unique constraint on \"users\" (phone)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "users_phone_key",
+        "table": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"users_phone_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "users_phone_key",
+          "public",
+          "\"public\".\"users\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"users_phone_key\"",
+        "sql": "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT \"users_phone_key\" UNIQUE (\"phone\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"users_phone_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "users_phone_key",
+          "public",
+          "\"public\".\"users\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.users.users_auth_provider_auth_subject_key",
+    "label": "Add unique constraint on \"users\" (auth_provider, auth_subject)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "users_auth_provider_auth_subject_key",
+        "table": "users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"users_auth_provider_auth_subject_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "users_auth_provider_auth_subject_key",
+          "public",
+          "\"public\".\"users\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"users_auth_provider_auth_subject_key\"",
+        "sql": "ALTER TABLE \"public\".\"users\" ADD CONSTRAINT \"users_auth_provider_auth_subject_key\" UNIQUE (\"auth_provider\", \"auth_subject\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"users_auth_provider_auth_subject_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "users_auth_provider_auth_subject_key",
+          "public",
+          "\"public\".\"users\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.role_permissions.role_permissions_permission_code_idx_8904843b",
+    "label": "Create index \"role_permissions_permission_code_idx_8904843b\" on \"role_permissions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "role_permissions_permission_code_idx_8904843b",
+        "table": "role_permissions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"role_permissions_permission_code_idx_8904843b\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions_permission_code_idx_8904843b\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"role_permissions_permission_code_idx_8904843b\"",
+        "sql": "CREATE INDEX \"role_permissions_permission_code_idx_8904843b\" ON \"public\".\"role_permissions\" (\"permission_code\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"role_permissions_permission_code_idx_8904843b\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions_permission_code_idx_8904843b\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.role_permissions.role_permissions_permission_role_9eb168b8",
+    "label": "Create index \"role_permissions_permission_role_9eb168b8\" on \"role_permissions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "role_permissions_permission_role_9eb168b8",
+        "table": "role_permissions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"role_permissions_permission_role_9eb168b8\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions_permission_role_9eb168b8\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"role_permissions_permission_role_9eb168b8\"",
+        "sql": "CREATE INDEX \"role_permissions_permission_role_9eb168b8\" ON \"public\".\"role_permissions\" (\"permission_code\", \"role_code\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"role_permissions_permission_role_9eb168b8\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions_permission_role_9eb168b8\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.role_permissions.role_permissions_role_code_idx_60d65c2f",
+    "label": "Create index \"role_permissions_role_code_idx_60d65c2f\" on \"role_permissions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "role_permissions_role_code_idx_60d65c2f",
+        "table": "role_permissions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"role_permissions_role_code_idx_60d65c2f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions_role_code_idx_60d65c2f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"role_permissions_role_code_idx_60d65c2f\"",
+        "sql": "CREATE INDEX \"role_permissions_role_code_idx_60d65c2f\" ON \"public\".\"role_permissions\" (\"role_code\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"role_permissions_role_code_idx_60d65c2f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"role_permissions_role_code_idx_60d65c2f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_members.staff_members_role_code_idx_60d65c2f",
+    "label": "Create index \"staff_members_role_code_idx_60d65c2f\" on \"staff_members\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_members_role_code_idx_60d65c2f",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_members_role_code_idx_60d65c2f\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members_role_code_idx_60d65c2f\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_members_role_code_idx_60d65c2f\"",
+        "sql": "CREATE INDEX \"staff_members_role_code_idx_60d65c2f\" ON \"public\".\"staff_members\" (\"role_code\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_members_role_code_idx_60d65c2f\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members_role_code_idx_60d65c2f\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_members.staff_members_role_status_01d327e0",
+    "label": "Create index \"staff_members_role_status_01d327e0\" on \"staff_members\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_members_role_status_01d327e0",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_members_role_status_01d327e0\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members_role_status_01d327e0\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_members_role_status_01d327e0\"",
+        "sql": "CREATE INDEX \"staff_members_role_status_01d327e0\" ON \"public\".\"staff_members\" (\"role_code\", \"status\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_members_role_status_01d327e0\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members_role_status_01d327e0\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.staff_members.staff_members_single_owner_833f137c",
+    "label": "Create index \"staff_members_single_owner_833f137c\" on \"staff_members\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "staff_members_single_owner_833f137c",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"staff_members_single_owner_833f137c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members_single_owner_833f137c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"staff_members_single_owner_833f137c\"",
+        "sql": "CREATE UNIQUE INDEX \"staff_members_single_owner_833f137c\" ON \"public\".\"staff_members\" (\"role_code\") WHERE (role_code = 'owner')",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"staff_members_single_owner_833f137c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"staff_members_single_owner_833f137c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.role_permissions.role_permissions_role_code_fkey",
+    "label": "Add foreign key \"role_permissions_role_code_fkey\" on \"role_permissions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "role_permissions_role_code_fkey",
+        "table": "role_permissions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"role_permissions_role_code_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "role_permissions_role_code_fkey",
+          "public",
+          "\"public\".\"role_permissions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"role_permissions_role_code_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"role_permissions\"\nADD CONSTRAINT \"role_permissions_role_code_fkey\"\nFOREIGN KEY (\"role_code\")\nREFERENCES \"public\".\"roles\" (\"code\")\nON DELETE RESTRICT\nON UPDATE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"role_permissions_role_code_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "role_permissions_role_code_fkey",
+          "public",
+          "\"public\".\"role_permissions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.role_permissions.role_permissions_permission_code_fkey",
+    "label": "Add foreign key \"role_permissions_permission_code_fkey\" on \"role_permissions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "role_permissions_permission_code_fkey",
+        "table": "role_permissions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"role_permissions_permission_code_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "role_permissions_permission_code_fkey",
+          "public",
+          "\"public\".\"role_permissions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"role_permissions_permission_code_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"role_permissions\"\nADD CONSTRAINT \"role_permissions_permission_code_fkey\"\nFOREIGN KEY (\"permission_code\")\nREFERENCES \"public\".\"permissions\" (\"code\")\nON DELETE RESTRICT\nON UPDATE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"role_permissions_permission_code_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "role_permissions_permission_code_fkey",
+          "public",
+          "\"public\".\"role_permissions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.staff_members.staff_members_role_code_fkey",
+    "label": "Add foreign key \"staff_members_role_code_fkey\" on \"staff_members\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "staff_members_role_code_fkey",
+        "table": "staff_members"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"staff_members_role_code_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_members_role_code_fkey",
+          "public",
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"staff_members_role_code_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"staff_members\"\nADD CONSTRAINT \"staff_members_role_code_fkey\"\nFOREIGN KEY (\"role_code\")\nREFERENCES \"public\".\"roles\" (\"code\")\nON DELETE RESTRICT\nON UPDATE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"staff_members_role_code_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "staff_members_role_code_fkey",
+          "public",
+          "\"public\".\"staff_members\""
+        ]
+      }
+    ]
+  }
+]

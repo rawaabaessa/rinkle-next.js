@@ -21,6 +21,6 @@ function CheckoutIdentity({ customer, children }: { customer: CustomerProfile; c
 export function CheckoutAccess({ children }: { children: ReactNode }) {
   const customer = useCustomer(); const login = useCustomerLogin(); const { items } = useCart();
   if (!items.length) return children;
-  if (!customer) return <section className="account-card mx-auto max-w-xl py-12 text-center"><span className="account-symbol mx-auto"><UserRound size={28} /></span><h2 className="mt-6 text-xl font-bold">ادخلي لنكمل طلبك</h2><p className="mt-4 mb-6 text-sm leading-7 text-muted">سلتك محفوظة. رقم جوالك يساعدك تتابعين طلبك وتوصلين لبياناتك بسهولة.</p><Button onClick={() => login("/checkout")}>الدخول برقم الجوال</Button><p className="account-notice mt-5">الدخول تجريبي، ولن تصلك رسالة فعلية.</p></section>;
+  if (!customer) return <section className="account-card mx-auto max-w-xl py-12 text-center"><span className="account-symbol mx-auto"><UserRound size={28} /></span><h2 className="mt-6 text-xl font-bold">ادخلي لنكمل طلبك</h2><p className="mt-4 mb-6 text-sm leading-7 text-muted">سلتك محفوظة. رقم جوالك يساعدك تتابعين طلبك وتوصلين لبياناتك بسهولة.</p><Button onClick={() => login("/checkout")}>الدخول برقم الجوال</Button><p className="account-notice mt-5">يلزم التحقق من رقم الجوال قبل إتمام الطلب. الخدمة غير مفعّلة حاليًا.</p></section>;
   return <CheckoutIdentity customer={customer}>{children}</CheckoutIdentity>;
 }
