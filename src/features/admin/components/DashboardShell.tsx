@@ -9,8 +9,10 @@ import { AdminCatalogProvider, useAdminCatalog } from "../AdminCatalogProvider";
 import { AdminIcon } from "./AdminIcon";
 import { AdminOrdersProvider } from "../orders/AdminOrdersProvider";
 import { dashboardNavigation } from "../navigation";
+import { can, dashboardPermission, type StaffPrincipal } from "@/lib/auth/policy";
+import { StaffLogout } from "./StaffLogout";
 
-function Shell({ children }: { children: ReactNode }) {
+function Shell({ children, staff }: { children: ReactNode; staff: StaffPrincipal }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuToggle = useRef<HTMLButtonElement>(null);
@@ -24,18 +26,18 @@ function Shell({ children }: { children: ReactNode }) {
       <nav id="dashboard-navigation" aria-label="تنقل لوحة الإدارة" className="admin-nav" onKeyDown={(event) => { if (event.key === "Escape" && menuOpen) { setMenuOpen(false); menuToggle.current?.focus(); } }}>
         {dashboardNavigation.map((group) => <div className="admin-nav-group" key={group.title}>
           <p className="admin-nav-label">{group.title}</p>
-          {group.items.map((item) => <Link key={item.href} href={item.href} aria-current={currentPage?.href === item.href ? "page" : undefined} onClick={() => setMenuOpen(false)}><AdminIcon name={item.icon} /><span>{item.title}</span></Link>)}
+          {group.items.filter((item) => { const permission = dashboardPermission(item.href); return permission && can(staff, permission); }).map((item) => <Link key={item.href} href={item.href} aria-current={currentPage?.href === item.href ? "page" : undefined} onClick={() => setMenuOpen(false)}><AdminIcon name={item.icon} /><span>{item.title}</span></Link>)}
         </div>)}
       </nav>
     </aside>
     <div className="admin-workspace-main">
-      <header className="admin-topbar"><div><span className="admin-breadcrumb">رينكل بيكري <span>/</span> {currentPage?.title ?? "لوحة الإدارة"}</span></div><div className="admin-topbar-end"><span className="admin-local"><span />مساحة تجريبية</span><span className="admin-avatar" aria-label="مساحة رينكل">ر</span></div></header>
+      <header className="admin-topbar"><div><span className="admin-breadcrumb">رينكل بيكري <span>/</span> {currentPage?.title ?? "لوحة الإدارة"}</span></div><div className="admin-topbar-end"><span>{staff.name}</span><StaffLogout demo={staff.id === "local-demo-owner"} /></div></header>
       <main id="dashboard-main" className="admin-main">{error && <div role="alert" className="admin-alert admin-alert-error">{error}</div>}{notice && <p className="admin-alert admin-alert-success" role="status"><AdminIcon name="check" />{notice}</p>}{children}</main>
       <footer className="admin-footer"><span>رينكل بيكري <span aria-hidden="true">·</span> صُنع بحب، ويُدار بكل بساطة.</span><span>معاينة محلية · التغييرات لا تُنشر في المتجر بعد</span></footer>
     </div>
   </div>;
 }
 
-export function DashboardShell({ children }: { children: ReactNode }) {
-  return <AdminCatalogProvider><AdminOrdersProvider><Shell>{children}</Shell></AdminOrdersProvider></AdminCatalogProvider>;
+export function DashboardShell({ children, staff }: { children: ReactNode; staff: StaffPrincipal }) {
+  return <AdminCatalogProvider><AdminOrdersProvider><Shell staff={staff}>{children}</Shell></AdminOrdersProvider></AdminCatalogProvider>;
 }

@@ -1,21 +1,178 @@
 // use prisma-8
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+// Rinkle-Database-Design.pdf pp. 9, 22-29. Customer and staff identities are separate.
+model users {
+  id                Uuid              @id @default(sql`gen_random_uuid()`)
+  phone             VarChar(16)       @unique
+  name              VarChar(100)?
+  // Explicit decision: NULL until a server-verified OTP succeeds; no default now().
+  phone_verified_at TimestamptzString?
+  auth_provider     String?
+  auth_subject      String?
+  last_login_at     TimestamptzString?
+  created_at        TimestamptzString  @default(now())
+  updated_at        TimestamptzString  @default(now())
+  deleted_at        TimestamptzString?
+  // Better Auth's technical email is never used for customer login or messaging.
+  auth_email        String?          @unique
+  email_verified    Boolean          @default(false)
+  image             String?
+  phone_verified    Boolean          @default(false)
+  sessions          customer_sessions[]
+  accounts          customer_accounts[]
+
+  @@unique([auth_provider, auth_subject])
+  @@check(expression: "(auth_provider IS NULL) = (auth_subject IS NULL)", name: "users_auth_identity_pair")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+model roles {
+  code             String            @id
+  name             VarChar(80)
+  description      String?
+  created_at       TimestamptzString  @default(now())
+  updated_at       TimestamptzString  @default(now())
+  staff_members    staff_members[]
+  role_permissions role_permissions[]
+}
+
+model permissions {
+  code             String            @id
+  name             VarChar(100)
+  description      String?
+  created_at       TimestamptzString  @default(now())
+  updated_at       TimestamptzString  @default(now())
+  role_permissions role_permissions[]
+}
+
+model role_permissions {
+  role_code       String
+  permission_code String
+  created_at      TimestamptzString @default(now())
+  role            roles           @relation(fields: [role_code], references: [code], onDelete: Restrict, onUpdate: Restrict)
+  permission      permissions     @relation(fields: [permission_code], references: [code], onDelete: Restrict, onUpdate: Restrict)
+
+  @@id([role_code, permission_code])
+  @@index([permission_code, role_code], name: "role_permissions_permission_role")
+}
+
+model staff_members {
+  id            Uuid              @id @default(sql`gen_random_uuid()`)
+  name          VarChar(80)
+  email         VarChar(150)       @unique
+  role_code     String
+  status        String            @default("invited")
+  auth_provider String?
+  auth_subject  String?
+  last_login_at TimestamptzString?
+  created_at    TimestamptzString  @default(now())
+  updated_at    TimestamptzString  @default(now())
+  role          roles             @relation(fields: [role_code], references: [code], onDelete: Restrict, onUpdate: Restrict)
+  email_verified Boolean          @default(false)
+  image          String?
+  sessions       staff_sessions[]
+  accounts       staff_accounts[]
+
+  @@unique([auth_provider, auth_subject])
+  @@index([role_code, status], name: "staff_members_role_status")
+  @@index([role_code], unique: true, where: "role_code = 'owner'", name: "staff_members_single_owner")
+  @@check(expression: "status IN ('invited', 'active', 'paused')", name: "staff_members_status")
+  @@check(expression: "role_code <> 'owner' OR status = 'active'", name: "staff_members_owner_active")
+  @@check(expression: "email = lower(email)", name: "staff_members_email_lowercase")
+  @@check(expression: "(auth_provider IS NULL) = (auth_subject IS NULL)", name: "staff_members_auth_identity_pair")
+}
+
+// Better Auth PostgreSQL adapter tables. Prisma Contract remains the migration owner.
+model staff_sessions {
+  id         Uuid @id @default(sql`gen_random_uuid()`)
+  user_id    Uuid
+  token      String @unique
+  expires_at TimestamptzString
+  created_at TimestamptzString @default(now())
+  updated_at TimestamptzString @default(now())
+  ip_address String?
+  user_agent String?
+  user       staff_members @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  @@index([expires_at])
+}
+
+model customer_sessions {
+  id         Uuid @id @default(sql`gen_random_uuid()`)
+  user_id    Uuid
+  token      String @unique
+  expires_at TimestamptzString
+  created_at TimestamptzString @default(now())
+  updated_at TimestamptzString @default(now())
+  ip_address String?
+  user_agent String?
+  user       users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  @@index([expires_at])
+}
+
+model staff_accounts {
+  id                       Uuid @id @default(sql`gen_random_uuid()`)
+  user_id                  Uuid
+  account_id               String
+  provider_id              String
+  password                 String?
+  access_token             String?
+  refresh_token            String?
+  id_token                 String?
+  access_token_expires_at   TimestamptzString?
+  refresh_token_expires_at  TimestamptzString?
+  scope                    String?
+  created_at               TimestamptzString @default(now())
+  updated_at               TimestamptzString @default(now())
+  user                     staff_members @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  @@unique([provider_id, account_id])
+  @@unique([user_id, provider_id])
+}
+
+model customer_accounts {
+  id                       Uuid @id @default(sql`gen_random_uuid()`)
+  user_id                  Uuid
+  account_id               String
+  provider_id              String
+  password                 String?
+  access_token             String?
+  refresh_token            String?
+  id_token                 String?
+  access_token_expires_at   TimestamptzString?
+  refresh_token_expires_at  TimestamptzString?
+  scope                    String?
+  created_at               TimestamptzString @default(now())
+  updated_at               TimestamptzString @default(now())
+  user                     users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  @@unique([provider_id, account_id])
+  @@unique([user_id, provider_id])
+}
+
+model staff_verifications {
+  id         Uuid @id @default(sql`gen_random_uuid()`)
+  identifier String
+  value      String
+  expires_at TimestamptzString
+  created_at TimestamptzString @default(now())
+  updated_at TimestamptzString @default(now())
+  @@index([identifier])
+  @@index([expires_at])
+}
+
+model customer_verifications {
+  id         Uuid @id @default(sql`gen_random_uuid()`)
+  identifier String
+  value      String
+  expires_at TimestamptzString
+  created_at TimestamptzString @default(now())
+  updated_at TimestamptzString @default(now())
+  @@index([identifier])
+  @@index([expires_at])
+}
+
+// Shared atomic limiter; HMAC keys contain no raw email address or IP.
+model auth_rate_limits {
+  key        String @id
+  count      Int
+  expires_at TimestamptzString
+  @@index([expires_at])
+  @@check(expression: "count > 0", name: "auth_rate_limits_positive")
 }
